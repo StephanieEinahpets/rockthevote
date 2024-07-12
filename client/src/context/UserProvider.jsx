@@ -113,6 +113,34 @@ export default function UserProvider(props){
         .catch(err => console.log(err.response.data.errMsg))
     }
 
+    //delete issue
+    function deleteIssue(issueId) {
+        userAxios.delete(`/api/issues/${issueId}`)
+            .then(res => {
+                setUserState(prevState => ({
+                    ...prevState,
+                    issues: prevState.issues.filter(issue => issue._id !== issueId)
+                }));
+                setPublicState(prevState => prevState.filter(issue => issue._id !== issueId));
+            })
+            .catch(err => console.log(err.response.data.errMsg));
+    }
+
+
+    //edit issue
+    function editIssue(issueId, updatedIssue) {
+        userAxios.put(`/api/issues/${issueId}`, updatedIssue)
+            .then(res => {
+                setUserState(prevState => ({
+                    ...prevState,
+                    issues: prevState.issues.map(issue => issue._id === issueId ? res.data : issue)
+                }))
+                setPublicState(prevState => prevState.map(issue => issue._id === issueId ? res.data : issue))
+            })
+            .catch(err => console.log(err.response.data.errMsg))
+    }
+    
+
     function getAllComments(){
         userAxios.get("/api/comments")
         .then(res => {
@@ -177,7 +205,9 @@ export default function UserProvider(props){
                 getAllComments,
                 addComment,
                 downVoteIssue,
-                upVoteIssue
+                upVoteIssue,
+                deleteIssue,
+                editIssue
             }}
         >
             {props.children}

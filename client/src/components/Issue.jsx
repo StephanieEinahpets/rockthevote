@@ -7,12 +7,15 @@ export default function Issue(props){
   const { title, description, imgUrl, user, datePosted, likedUsers, dislikedUsers, _id } = props
   
   // Access comments from the context
-  const { comments, getAllComments, token, upVoteIssue, downVoteIssue} = useContext(UserContext)
+  const { comments, getAllComments, token, upVoteIssue, downVoteIssue, deleteIssue, user: currentUser} = useContext(UserContext)
 
   const auth = token ? true : false
   
   // filter comments for the current issue
   const filteredComments = comments.filter(comment => comment.issue === _id)
+
+  // Check if the current user posted this issue
+  const isUserIssue = currentUser._id === user
 
   return (
     <div className='issue'>
@@ -25,6 +28,7 @@ export default function Issue(props){
       {auth && <button onClick={() => upVoteIssue(_id)}>👍</button>}
       {auth && <button onClick={() => downVoteIssue(_id)}>👎</button>}
       {auth && <CommentForm issueId = {_id}/>}
+      {isUserIssue && <button className="deleteButton" onClick={() => deleteIssue(_id)}>Delete My Issue</button>}
     </div>
   )
 }

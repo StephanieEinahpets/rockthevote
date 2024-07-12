@@ -92,11 +92,14 @@
   top: 22px;
 }
 
-
-
 .issue {
   border: thick double #32a1ce;
   margin: 15px;
   padding-top: 40px;
   padding-bottom: 40px;
 }
+
+.deleteButton:hover {
+  border-color: rgb(168, 1, 1);
+}
+
